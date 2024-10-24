@@ -1,63 +1,23 @@
-```markdown
-# Microservices Architecture
-
-## Basic Microservices Structure
 ```mermaid
 graph TD
-    subgraph Client Layer
-        Web[Web App]
-        Mobile[Mobile App]
+    subgraph CSR[Client-Side Rendering]
+        A1[Browser Request] --> B1[Minimal HTML]
+        B1 --> C1[React Bundle]
+        C1 --> D1[DOM Construction]
+        D1 --> E1[Interactive Page]
     end
 
-    subgraph Gateway Layer
-        API[API Gateway]
+    subgraph SSR[Server-Side Rendering]
+        A2[Browser Request] --> B2[Server Rendering]
+        B2 --> C2[Complete HTML]
+        C2 --> D2[Hydration]
+        D2 --> E2[Interactive Page]
     end
 
-    subgraph Service Layer
-        Auth[Auth Service]
-        Users[User Service]
-        Orders[Order Service]
-        Products[Product Service]
+    subgraph SSG[Static Site Generation]
+        A3[Build Time] --> B3[Pre-rendered HTML]
+        B3 --> C3[CDN Deployment]
+        C3 --> D3[Client Request]
+        D3 --> E3[Hydration]
     end
-
-    subgraph Data Layer
-        AuthDB[(Auth DB)]
-        UserDB[(User DB)]
-        OrderDB[(Order DB)]
-        ProductDB[(Product DB)]
-    end
-
-    Web --> API
-    Mobile --> API
-    API --> Auth
-    API --> Users
-    API --> Orders
-    API --> Products
-    
-    Auth --> AuthDB
-    Users --> UserDB
-    Orders --> OrderDB
-    Products --> ProductDB
-```
-
-## Service Communication
-```mermaid
-sequenceDiagram
-    participant Gateway
-    participant OrderService
-    participant ProductService
-    participant UserService
-    
-    Gateway->>OrderService: Create Order
-    activate OrderService
-    OrderService->>ProductService: Check Stock
-    activate ProductService
-    ProductService-->>OrderService: Stock Confirmed
-    deactivate ProductService
-    OrderService->>UserService: Get User Details
-    activate UserService
-    UserService-->>OrderService: User Details
-    deactivate UserService
-    OrderService-->>Gateway: Order Created
-    deactivate OrderService
 ```
