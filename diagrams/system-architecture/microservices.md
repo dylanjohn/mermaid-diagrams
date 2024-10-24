@@ -1,23 +1,53 @@
 ```mermaid
-graph TD
-    subgraph CSR[Client-Side Rendering]
-        A1[Browser Request] --> B1[Minimal HTML]
-        B1 --> C1[React Bundle]
-        C1 --> D1[DOM Construction]
-        D1 --> E1[Interactive Page]
-    end
+sequenceDiagram
+    participant Client
+    participant Gateway
+    participant Orders
+    participant Products
+    participant Users
+    participant DB
 
-    subgraph SSR[Server-Side Rendering]
-        A2[Browser Request] --> B2[Server Rendering]
-        B2 --> C2[Complete HTML]
-        C2 --> D2[Hydration]
-        D2 --> E2[Interactive Page]
-    end
+    Note over Client,DB: Basic Architecture Flow
+    Client->>Gateway: Request Service
+    activate Gateway
+    Gateway->>Orders: Route to Service
+    deactivate Gateway
+    activate Orders
+    Orders->>DB: Query Database
+    DB-->>Orders: Return Data
+    Orders-->>Gateway: Service Response
+    deactivate Orders
+    Gateway-->>Client: Return Result
 
-    subgraph SSG[Static Site Generation]
-        A3[Build Time] --> B3[Pre-rendered HTML]
-        B3 --> C3[CDN Deployment]
-        C3 --> D3[Client Request]
-        D3 --> E3[Hydration]
-    end
+    Note over Client,DB: Order Creation Flow
+    Client->>Gateway: Create Order
+    activate Gateway
+    Gateway->>Orders: New Order Request
+    activate Orders
+    Orders->>Products: Check Stock
+    activate Products
+    Products->>DB: Query Stock
+    DB-->>Products: Stock Status
+    Products-->>Orders: Stock Confirmed
+    deactivate Products
+    Orders->>Users: Get User Details
+    activate Users
+    Users->>DB: Query User
+    DB-->>Users: User Data
+    Users-->>Orders: User Details
+    deactivate Users
+    Orders->>DB: Save Order
+    DB-->>Orders: Order Saved
+    Orders-->>Gateway: Order Created
+    deactivate Orders
+    Gateway-->>Client: Order Confirmation
+    deactivate Gateway
+
+    Note over Client,DB: Data Synchronization
+    Orders->>Products: Update Inventory
+    activate Products
+    Products->>DB: Update Stock
+    DB-->>Products: Stock Updated
+    Products-->>Orders: Update Confirmed
+    deactivate Products
 ```
