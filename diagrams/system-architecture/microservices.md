@@ -38,10 +38,6 @@ graph TD
     Users --> UserDB
     Orders --> OrderDB
     Products --> ProductDB
-
-    style Web fill:#f9f,stroke:#333,stroke-width:2px
-    style Mobile fill:#f9f,stroke:#333,stroke-width:2px
-    style API fill:#bbf,stroke:#333,stroke-width:2px
 ```
 
 ## Service Communication
