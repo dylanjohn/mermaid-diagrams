@@ -15,7 +15,8 @@ graph TB
         
         subgraph "Client Components"
             CSR[Client-Side React]
-            RQ[React States/Hooks]
+            RQ[React Query]
+            CACHE[Query Cache]
         end
         
         subgraph "API Layer"
@@ -44,13 +45,14 @@ graph TB
     UI <--> ROUTER
     UI <--> CSR
     CSR <--> RQ
+    RQ <--> CACHE
     
     %% Server-side flow
     ROUTER <--> SSR
     ROUTER <--> ACTIONS
     
     %% API Connections
-    CSR <--> HONO
+    RQ <--> HONO
     SSR <--> HONO
     ACTIONS <--> SB
     
@@ -72,4 +74,4 @@ graph TB
     
     %% Data flow annotations
     classDef highlight fill:#f9f,stroke:#333,stroke-width:2px;
-    class HONO,SB,SANITY highlight;
+    class HONO,SB,SANITY,RQ highlight;
